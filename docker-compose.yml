@@ -1,0 +1,42 @@
+version: '2'
+services:
+  nginx:
+      build: ./docker/nginx/
+      ports:
+          - 80:80
+      depends_on:
+          - php
+      volumes:
+          - .:/var/www/html
+
+  php:
+      build: ./docker/php
+      depends_on:
+          - mysql
+          - mongo
+      volumes:
+          - .:/var/www/html:rw
+      environment:
+          DB_HOST: mysql
+          DB_DATABASE: blog
+          DB_USERNAME: blog
+          DB_PASSWORD: blog
+
+  memcache:
+      image: memcached:latest
+
+  mongo:
+      image: mongo:latest
+
+  mysql:
+      image: mysql:latest
+      ports:
+          - 3306:3306
+      volumes:
+          - ./docker/volumes/mysql/data:/var/lib/mysql
+#          - ./sql:/docker-entrypoint-initdb.d:ro
+      environment:
+          MYSQL_ROOT_PASSWORD: blog
+          MYSQL_DATABASE: blog
+          MYSQL_USER: blog
+          MYSQL_PASSWORD: blog
