@@ -21,12 +21,12 @@ services:
           DB_DATABASE: blog
           DB_USERNAME: blog
           DB_PASSWORD: blog
-
-  memcache:
-      image: memcached:latest
+          MONGO_HOST: mongo
 
   mongo:
       image: mongo:latest
+      ports:
+        - 27017:27017
 
   mysql:
       image: mysql:latest
@@ -34,7 +34,7 @@ services:
           - 3306:3306
       volumes:
           - ./docker/volumes/mysql/data:/var/lib/mysql
-#          - ./sql:/docker-entrypoint-initdb.d:ro
+          - ./sql:/docker-entrypoint-initdb.d:ro
       environment:
           MYSQL_ROOT_PASSWORD: blog
           MYSQL_DATABASE: blog
